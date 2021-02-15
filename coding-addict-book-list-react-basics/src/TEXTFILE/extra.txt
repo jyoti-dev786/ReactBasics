@@ -1,0 +1,29 @@
+{
+    title: 'I Love You to the Moon and Back',
+    author: 'Amelia Hepworth',
+    imgUrl:
+      'https://images-na.ssl-images-amazon.com/images/I/81eB+7+CkUL._AC_US218_..jpg',
+    alt: 'I Love You to the Moon and Back ',
+  },
+  {
+    title: 'I Promise',
+    author: ' LeBron James and Nina Mata ',
+    imgUrl: 'https://m.media-amazon.com/images/I/81Eb-QpvFTL._AC_UY218_.jpg',
+    alt: 'I Promise ',
+  },
+
+
+  let firstBook = {
+  title: 'I Love You to the Moon and Back',
+  author: 'Amelia Hepworth',
+  imgUrl:
+    'https://images-na.ssl-images-amazon.com/images/I/81eB+7+CkUL._AC_US218_..jpg',
+  alt: 'I_Love_You_to the_Moon_and_Back_img',
+};
+
+let secondBook = {
+  title: 'I Promise',
+  author: ' LeBron James and Nina Mata ',
+  imgUrl: 'https://m.media-amazon.com/images/I/81Eb-QpvFTL._AC_UY218_.jpg',
+  alt: 'I Promise ',
+};

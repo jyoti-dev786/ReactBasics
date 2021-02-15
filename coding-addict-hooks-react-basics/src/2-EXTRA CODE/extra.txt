@@ -1,0 +1,158 @@
+import React, { useState } from 'react';
+
+const ShortCircuit = () => {
+  //const [text, setText] = useState('k');
+
+  const [toggleBtn, setToggleBtn] = useState(true);
+
+  //   const firstvalue = text || 'hello world';
+  //   const secondvalue = text && 'hello world';
+
+  return (
+    <>
+      {/* <h1>{text || 'John Deo'}</h1> */}
+      {/* <h1>{text && <h2>hello world</h2>}</h1> */}
+      {/* <button className="btn" onClick={changeText}>
+        {buttonText}
+      </button> */}
+      <button className="btn" onClick={() => setToggleBtn(!toggleBtn)}>
+        {toggleBtn ? 'hide' : 'show'}
+      </button>
+
+      {toggleBtn && <h1>Hello World</h1>}
+    </>
+  );
+};
+
+export default ShortCircuit;
+--------------------------------------forms------------------------------------------------------------------
+import React, { useState } from 'react';
+
+const ControlledInputs = () => {
+  const [firstName, setfirstName] = useState('');
+  const [email, setEmail] = useState('');
+  const [peopleList, setPeopleList] = useState([]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (firstName && email) {
+      const personObject = {
+        id: new Date().getTime().toString(),
+        firstName,
+        email,
+      };
+      console.log(personObject);
+      setPeopleList([...peopleList, personObject]);
+      setfirstName('');
+      setEmail('');
+    } else {
+      console.log('Its an empty string');
+    }
+  };
+
+  const removeHandler = (id) => {
+    let newPeople = peopleList.filter((person) => {
+      return person.id !== id;
+    });
+    setPeopleList(newPeople);
+  };
+
+  return (
+    <>
+      <article>
+        <form className="form" onSubmit={handleSubmit}>
+          <div className="form-control">
+            <label htmlFor="firstName">Name :</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={firstName}
+              onChange={(e) => setfirstName(e.target.value)}
+            />
+          </div>
+          <div className="form-control">
+            <label htmlFor="email">Email :</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <button type="submit">add person</button>
+        </form>
+        {peopleList.map((person) => {
+          const { id, firstName, email } = person;
+          return (
+            <div key={id} className="item">
+              <h4>{firstName}</h4>
+              <h4>{email}</h4>
+              <button onClick={() => removeHandler(id)}>remove</button>
+            </div>
+          );
+        })}
+      </article>
+    </>
+  );
+};
+
+export default ControlledInputs;
+
+//-----------People.js-------------------------
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { data } from '../../../data';
+
+const People = () => {
+  const [peoples, setPeoples] = useState(data);
+  console.log(data);
+  return (
+    <>
+      <h1>People Page</h1>
+      <div>
+        {peoples.map((people) => {
+          return (
+            <div key={people.id} className="item">
+              <h4>{people.name}</h4>
+              <Link to={`/person/${people.id}`}>Learn More</Link>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+export default People;
+
+
+//---------------------------Person.js---------------------------------------
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { data } from '../../../data';
+
+const Person = () => {
+  const [name, setName] = useState('default Value');
+  const { id } = useParams();
+
+  useEffect(() => {
+    const newPerson = data.find((people) => {
+      return people.id === Number(id);
+    });
+    setName(newPerson.name);
+  }, []);
+  return (
+    <>
+      <h1>{name}</h1>
+
+      <Link to="/people" className="btn">
+        Back to People
+      </Link>
+    </>
+  );
+};
+
+export default Person;
+

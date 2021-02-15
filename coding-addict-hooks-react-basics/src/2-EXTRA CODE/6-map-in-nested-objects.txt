@@ -1,0 +1,70 @@
+import React, { useState, useEffect } from 'react';
+
+const url = 'https://course-api.com/javascript-store-products';
+const Example = () => {
+  const [products, setProducts] = useState([]);
+  console.log(products);
+
+  useEffect(() => {
+    fetch(url)
+      .then((res) => res.json())
+      .then((result) => setProducts(result));
+  }, []);
+
+  const newProduct = products.map((prod) => {
+    const { id, fields } = prod;
+    return (
+      <div key={id}>
+        {fields.image.map((image) => {
+          const { url } = image;
+          return (
+            <div key={id}>
+              <ul>
+                <img
+                  style={{ height: 200, width: 200, paddingTop: 10 }}
+                  src={url}
+                  alt="pic"
+                />
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
+
+  return (
+    <>
+      <h2>{newProduct}</h2>
+    </>
+  );
+};
+
+export default Example;
+
+
+//----------------------OR below--------------------------------
+
+ const newProduct = products.map((prod) => {
+    const { id, fields } = prod;
+    return (
+      <div key={id}>
+        <ul>
+          <li>
+            {fields.image.map((item) => {
+              return (
+                <div key={id}>
+                  <img
+                    style={{ height: 200, width: 200 }}
+                    src={item.url}
+                    alt="pic"
+                  />
+                  <h6>{item.size}bytes</h6>
+                </div>
+              );
+            })}
+          </li>
+        </ul>
+      </div>
+    );
+  });

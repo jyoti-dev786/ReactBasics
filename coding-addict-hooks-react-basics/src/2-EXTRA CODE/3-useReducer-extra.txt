@@ -1,0 +1,132 @@
+import React, { useReducer, useState } from 'react';
+import Modal from './modal';
+import { data } from '../../../data';
+
+const reducer = (state, action) => {
+  if (action.type === 'ADD_ITEM') {
+    const newPeople = [...state.people, action.payload];
+
+    return {
+      ...state,
+      people: newPeople,
+
+      isModalOpen: true,
+      modalContent: 'item added',
+    };
+  }
+  if (action.type === 'NO_VALUE') {
+    return {
+      ...state,
+      isModalOpen: true,
+      modalContent: 'Please enter value',
+    };
+  }
+  if (action.type === 'CLOSE_MODAL') {
+    return {
+      ...state,
+      isModalOpen: false,
+    };
+  }
+  if (action.type === 'REMOVE_ITEM') {
+    const newPeople = state.people.filter(
+      (person) => person.id !== action.payload
+    );
+    return {
+      ...state,
+      people: newPeople,
+      isModalOpen: true,
+      modalContent: 'item removed',
+    };
+  }
+
+  throw new Error('no matching action type');
+};
+
+const defaultState = {
+  people: [],
+
+  isModalOpen: false,
+  modalContent: 'hello world',
+};
+
+//-----------------------------------------------------------------------------------------------------------------------------------------
+
+const Index = () => {
+  const [name, setName] = useState('');
+  const [state, dispatch] = useReducer(reducer, defaultState);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (name) {
+      const newItem = { id: new Date().getTime().toString(), name };
+      dispatch({ type: 'ADD_ITEM', payload: newItem });
+      setName('');
+    } else {
+      dispatch({ type: 'NO_VALUE' });
+    }
+  };
+
+  const closeModalHandler = () => {
+    dispatch({ type: 'CLOSE_MODAL' });
+  };
+
+  return (
+    <>
+      {state.isModalOpen && (
+        <Modal
+          modalContent={state.modalContent}
+          closeModal={closeModalHandler}
+        />
+      )}
+      <form className="form" onSubmit={submitHandler}>
+        <div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <button>add</button>
+      </form>
+      {state.people.map((person) => {
+        return (
+          <div className="item" key={person.id}>
+            <ul>
+              <li>{person.name}</li>
+            </ul>
+            <button
+              onClick={() =>
+                dispatch({ type: 'REMOVE_ITEM', payload: person.id })
+              }
+            >
+              remove
+            </button>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+export default Index;
+
+
+-------------------------------------------MODAL CODE------------------------------------------------------------------
+import React, { useEffect } from 'react';
+
+const Modal = (props) => {
+  const { modalContent, closeModal } = props;
+  console.log(props);
+  useEffect(() => {
+    setTimeout(() => {
+      closeModal();
+    }, 500);
+  });
+  return (
+    <div className="modal">
+      <p>{modalContent}</p>
+    </div>
+  );
+};
+
+export default Modal;

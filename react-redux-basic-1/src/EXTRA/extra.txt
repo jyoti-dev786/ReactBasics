@@ -1,0 +1,149 @@
+//-----index.js--------
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import store from './ALL/STORE/store';
+import './index.css';
+
+//react-redux
+import { Provider } from 'react-redux';
+
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
+
+
+//--------App.js----------
+import React from 'react';
+import Users from './ALL/COMPONENTS/users';
+
+const App = () => {
+  return (
+    <>
+      <Users />
+    </>
+  );
+};
+
+export default App;
+
+//-------store.js---------
+import { createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import rootReducer from '../REDUCERS/rootReducer';
+
+const store = createStore(rootReducer, composeWithDevTools());
+
+export default store;
+
+
+//-------root reducer--------
+import { combineReducers } from 'redux';
+import users from './userReducer';
+const rootReducer = combineReducers({
+  data: users,
+});
+
+export default rootReducer;
+
+
+//------userReducer .js---------
+const initialState = {
+  users: [
+    {
+      id: 1,
+      name: 'Ervin Howell',
+      username: 'Bret',
+      email: 'Sincere@april.biz',
+    },
+    {
+      id: 2,
+      name: 'Ervin Howell',
+      username: 'Antonette',
+      email: 'Shanna@melissa.tv',
+    },
+    {
+      id: 3,
+      name: 'Clementine Bauch',
+      username: 'Samantha',
+      email: 'Nathan@yesenia.net',
+    },
+    {
+      id: 4,
+      name: 'Patricia Lebsack',
+      username: 'Karianne',
+      email: 'Julianne.OConner@kory.org',
+    },
+  ],
+};
+
+const users = (state = initialState, action) => {
+  switch (action.type) {
+    default:
+      return state;
+  }
+};
+
+export default users;
+
+
+//-------users.js---------
+import React from 'react';
+import { connect } from 'react-redux';
+import SingleUser from './singleUser';
+
+const Users = (props) => {
+  const { Userdata } = props;
+
+  return (
+    <>
+      <SingleUser data={Userdata} />
+    </>
+  );
+};
+
+const mapStateToProps = (state) => ({
+  Userdata: state.data.users,
+});
+
+export default connect(mapStateToProps)(Users);
+
+
+//-------singleUser.js----------
+import React from 'react';
+
+const SingleUser = ({ data }) => {
+  return (
+    <>
+      <div className="container">
+        <table className="center">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>UserName</th>
+              <th>email</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {data.map((people) => {
+              const { id, name, username, email } = people;
+              return (
+                <tr key={id}>
+                  <td>{name}</td>
+                  <td>{username}</td>
+                  <td>{email}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+};
+
+export default SingleUser;

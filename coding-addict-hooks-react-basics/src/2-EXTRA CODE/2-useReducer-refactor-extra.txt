@@ -1,0 +1,113 @@
+//--------UseReducer not refactor(old onw in which we will refactor useReducer)
+
+import React, { useState } from 'react';
+import Modal from './modal';
+import { data } from '../../../data';
+
+const Index = () => {
+  const [people, setPeople] = useState(data);
+  const [name, setName] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [showContentModal, setShowContentModel] = useState('');
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    if (name) {
+      setShowModal(true);
+      setShowContentModel('item added');
+
+      setPeople([...people, { id: new Date().getTime().toString(), name }]);
+      setName('');
+    } else {
+      setShowModal(true);
+      setShowContentModel('pls enter the value');
+      setName('');
+    }
+  };
+
+  return (
+    <>
+      {showModal && showContentModal}
+      <form className="form" onSubmit={submitHandler}>
+        <div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <button>add</button>
+      </form>
+
+      {people.map((person) => {
+        return (
+          <div key={person.id}>
+            <ul>
+              <li>{person.name}</li>
+            </ul>
+          </div>
+        );
+      })}
+    </>
+  );
+};
+
+export default Index;
+
+
+
+//--------------------------same ex as above only focus method is used in useEffect hook----------------------------------------
+import React, { useEffect, useRef, useState } from 'react';
+import Modal from './modal';
+import { data } from '../../../data';
+
+const Index = () => {
+  const [name, setName] = useState('');
+  const [people, setPeople] = useState(data);
+  const [ismodal, setIsModal] = useState(false);
+  const refContainer = useRef(null);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+
+    if (name) {
+      let newObject = { id: new Date().getTime().toString(), name };
+      setPeople([...people, newObject]);
+      setName('');
+    }
+  };
+
+  useEffect(() => {
+    refContainer.current.focus();
+  });
+  return (
+    <>
+      {ismodal && <Modal />}
+      <form className="form" onSubmit={submitHandler}>
+        <div>
+          <input
+            ref={refContainer}
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <button type="submit">add</button>
+      </form>
+
+      <div>
+        {people.map((person) => {
+          return (
+            <div key={person.id}>
+              <ul>
+                <li>{person.name}</li>
+              </ul>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+export default Index;
